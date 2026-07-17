@@ -1,0 +1,41 @@
+.dashboard {
+
+    width:100%;
+}
+
+.dashboard h1{
+
+    margin-bottom:30px;
+
+    color:#1e293b;
+}
+
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+
+    gap:20px;
+}
+
+.dashboard-loading,
+.dashboard-error{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    height:60vh;
+
+    font-size:24px;
+
+    font-weight:bold;
+}
+
+.dashboard-error{
+
+    color:red;
+}
