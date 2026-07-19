@@ -3,8 +3,8 @@ package api
 import (
 	"net/http"
 
-	"kubeintel/backend/internal/models"
 	"kubeintel/backend/internal/kubernetes"
+	"kubeintel/backend/internal/models"
 
 	corev1 "k8s.io/api/core/v1"
 

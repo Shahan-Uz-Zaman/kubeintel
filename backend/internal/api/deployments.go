@@ -1,10 +1,10 @@
 package api
 
 import (
-	"net/http"
-	"time"
 	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
+	"time"
 
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -27,7 +27,6 @@ type CreateDeploymentRequest struct {
 	Replicas  int32  `json:"replicas"`
 	Port      int32  `json:"port"`
 }
-
 
 func GetDeployments(c *gin.Context) {
 

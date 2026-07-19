@@ -37,4 +37,11 @@ func SetupRoutes(router *gin.Engine) {
 	router.DELETE("/api/deployments/:name", api.DeleteDeployment)
 	router.PUT("/api/deployments/:name/scale", api.ScaleDeployment)
 	router.POST("/api/deployments/:name/restart", api.RestartDeployment)
+
+	// Assignment 6
+	router.GET("/api/logs", api.GetPodLogs)
+	router.GET("/api/events", api.GetEvents)
+	router.GET("/api/logs/namespaces", api.GetNamespaces)
+	router.GET("/api/logs/pods", api.GetPods)
+	
 }

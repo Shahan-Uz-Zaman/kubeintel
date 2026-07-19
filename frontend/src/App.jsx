@@ -5,6 +5,8 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import Monitoring from "./pages/Monitoring";
 import DeploymentManager from "./pages/DeploymentManager";
+import Logs from "./pages/Logs";
+import Events from "./pages/Events";
 
 import "./App.css";
 
@@ -36,6 +38,15 @@ function App() {
               <Route
                   path="/deployments"
                   element={<DeploymentManager />}
+              />
+              <Route
+                  path="/logs"
+                  element={<Logs />}
+              />
+
+              <Route
+                  path="/events"
+                  element={<Events />}
               />
           </Routes>
         </div>
