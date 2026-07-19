@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"kubeintel/backend/internal/kubernetes"
-
 	"github.com/gin-gonic/gin"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"kubeintel/backend/internal/kubernetes"
 )
 
 type NodeResponse struct {
@@ -100,4 +100,57 @@ func GetNodes(c *gin.Context) {
 		"count": len(response),
 		"nodes": response,
 	})
+}
+func getNodeHealth(node corev1.Node) (string, []string) {
+
+	status := "Healthy"
+	var warnings []string
+
+	for _, c := range node.Status.Conditions {
+
+		switch c.Type {
+
+		case corev1.NodeReady:
+
+			if c.Status != corev1.ConditionTrue {
+
+				status = "Critical"
+				warnings = append(warnings, "Node Not Ready")
+			}
+
+		case corev1.NodeMemoryPressure:
+
+			if c.Status == corev1.ConditionTrue {
+
+				status = "Warning"
+				warnings = append(warnings, "Memory Pressure")
+			}
+
+		case corev1.NodeDiskPressure:
+
+			if c.Status == corev1.ConditionTrue {
+
+				status = "Warning"
+				warnings = append(warnings, "Disk Pressure")
+			}
+
+		case corev1.NodePIDPressure:
+
+			if c.Status == corev1.ConditionTrue {
+
+				status = "Warning"
+				warnings = append(warnings, "PID Pressure")
+			}
+
+		case corev1.NodeNetworkUnavailable:
+
+			if c.Status == corev1.ConditionTrue {
+
+				status = "Critical"
+				warnings = append(warnings, "Network Unavailable")
+			}
+		}
+	}
+
+	return status, warnings
 }

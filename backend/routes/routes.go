@@ -9,14 +9,13 @@ import (
 func SetupRoutes(router *gin.Engine) {
 
 	// Health
-	router.GET("/health", api.Health)
+	router.GET("/health", api.GetHealth)
 
 	// Assignment 2
 	router.GET("/api/cluster", api.GetCluster)
 	router.GET("/api/nodes", api.GetNodes)
 	router.GET("/api/pods", api.GetPods)
 	router.GET("/api/namespaces", api.GetNamespaces)
-	
 
 	// Assignment 3
 	router.GET("/api/dashboard", api.GetDashboard)
@@ -43,5 +42,7 @@ func SetupRoutes(router *gin.Engine) {
 	router.GET("/api/events", api.GetEvents)
 	router.GET("/api/logs/namespaces", api.GetNamespaces)
 	router.GET("/api/logs/pods", api.GetPods)
-	
+
+	//Assignment 7
+	router.GET("/api/health", api.GetHealth)
 }

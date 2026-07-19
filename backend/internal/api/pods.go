@@ -4,10 +4,10 @@ import (
 	"context"
 	"net/http"
 
-	"kubeintel/backend/internal/kubernetes"
-
 	"github.com/gin-gonic/gin"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"kubeintel/backend/internal/kubernetes"
 )
 
 type PodResponse struct {
@@ -66,4 +66,65 @@ func GetPods(c *gin.Context) {
 		"count": len(response),
 		"pods":  response,
 	})
+}
+
+func getPodHealthStatus(pod corev1.Pod) (string, string, int32) {
+
+	var totalRestarts int32
+	status := "Healthy"
+	reason := ""
+
+	for _, cs := range pod.Status.ContainerStatuses {
+
+		totalRestarts += cs.RestartCount
+
+		if cs.State.Waiting != nil {
+
+			reason = cs.State.Waiting.Reason
+
+			switch reason {
+
+			case "CrashLoopBackOff":
+				status = "Critical"
+
+			case "ImagePullBackOff":
+				status = "Critical"
+
+			case "ErrImagePull":
+				status = "Critical"
+
+			default:
+				status = "Warning"
+			}
+		}
+
+		if cs.LastTerminationState.Terminated != nil {
+
+			if cs.LastTerminationState.Terminated.Reason == "OOMKilled" {
+
+				status = "Critical"
+				reason = "OOMKilled"
+			}
+		}
+
+		if cs.RestartCount > 5 && status == "Healthy" {
+
+			status = "Warning"
+			reason = "High Restart Count"
+		}
+	}
+
+	if pod.Status.Phase == corev1.PodPending {
+
+		status = "Warning"
+		reason = "Pending"
+	}
+
+	if pod.Status.Phase == corev1.PodFailed {
+
+		status = "Critical"
+		reason = "Failed"
+	}
+
+	return status, reason, totalRestarts
 }
