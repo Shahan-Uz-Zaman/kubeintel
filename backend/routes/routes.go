@@ -30,4 +30,11 @@ func SetupRoutes(router *gin.Engine) {
 		monitoring.GET("/network", api.GetNetwork)
 		monitoring.GET("/storage", api.GetStorage)
 	}
+	//Assignment 5
+
+	router.GET("/api/deployments", api.GetDeployments)
+	router.POST("/api/deployments", api.CreateDeployment)
+	router.DELETE("/api/deployments/:name", api.DeleteDeployment)
+	router.PUT("/api/deployments/:name/scale", api.ScaleDeployment)
+	router.POST("/api/deployments/:name/restart", api.RestartDeployment)
 }
